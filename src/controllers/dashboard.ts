@@ -115,7 +115,13 @@ const getAnalyticsCustomers = async (req: Request, res: Response) => {
     const orderCounts = await Order.aggregate([
       { $match: { paymentStatus: 'paid' } },
       { $group: { _id: '$customer', count: { $sum: 1 } } },
-      { $group: { _id: null, oneOrder: { $sum: { $cond: [{ $eq: ['$count', 1] }, 1, 0] }, multiOrder: { $sum: { $cond: [{ $gt: ['$count', 1] }, 1, 0] } } } },
+      {
+        $group: {
+          _id: null,
+          oneOrder: { $sum: { $cond: [{ $eq: ['$count', 1] }, 1, 0] } },
+          multiOrder: { $sum: { $cond: [{ $gt: ['$count', 1] }, 1, 0] } },
+        },
+      },
     ]);
     const oneOrder = orderCounts[0]?.oneOrder ?? 0;
     const multiOrder = orderCounts[0]?.multiOrder ?? 0;
