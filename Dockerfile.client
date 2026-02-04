@@ -1,7 +1,7 @@
 # Tobo Storefront Client (Next.js)
 FROM node:20-alpine AS deps
 WORKDIR /app
-COPY client/package*.json ./
+COPY client/package.json client/package-lock.json ./
 RUN npm ci
 
 FROM node:20-alpine AS builder
